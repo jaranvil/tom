@@ -22,6 +22,8 @@ import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 
 import com.mysql.jdbc.Connection;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class Frame extends JFrame {
 
@@ -34,6 +36,7 @@ public class Frame extends JFrame {
     private JButton btnUp;
     private JButton btnDown;
     private JLabel lblDelay;
+    private JComboBox comboBox;
     
     Bot bot = new Bot();
 
@@ -59,7 +62,7 @@ public class Frame extends JFrame {
     public Frame() {
         setTitle("IRC Bot");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 261, 444);
+        setBounds(100, 100, 470, 255);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -70,7 +73,7 @@ public class Frame extends JFrame {
         panel.setLayout(null);
         
         txtMessage = new JTextField();
-        txtMessage.setBounds(10, 317, 223, 38);
+        txtMessage.setBounds(258, 127, 176, 28);
         panel.add(txtMessage);
         txtMessage.setColumns(10);
         
@@ -127,7 +130,7 @@ public class Frame extends JFrame {
                 }
             }
         });
-        btnConnect.setBounds(22, 120, 89, 23);
+        btnConnect.setBounds(20, 163, 89, 23);
         panel.add(btnConnect);
         
         JButton btnDisconnect = new JButton("Disconnet");
@@ -136,21 +139,21 @@ public class Frame extends JFrame {
                 disconnect();
             }
         });
-        btnDisconnect.setBounds(121, 120, 89, 23);
+        btnDisconnect.setBounds(119, 163, 89, 23);
         panel.add(btnDisconnect);
         
         lblInactivity = new JLabel("Inactivity: 0");
-        lblInactivity.setBounds(38, 197, 92, 14);
+        lblInactivity.setBounds(286, 42, 92, 14);
         panel.add(lblInactivity);
         
         lblDisconnected = new JLabel("Disconnected");
         lblDisconnected.setFont(new Font("Tahoma", Font.BOLD, 11));
         lblDisconnected.setForeground(Color.RED);
-        lblDisconnected.setBounds(38, 166, 94, 14);
+        lblDisconnected.setBounds(286, 11, 94, 14);
         panel.add(lblDisconnected);
         
         lblDelay = new JLabel("Action Delay: 0");
-        lblDelay.setBounds(38, 235, 92, 14);
+        lblDelay.setBounds(286, 80, 92, 14);
         panel.add(lblDelay);
         
         btnUp = new JButton("^");
@@ -159,7 +162,7 @@ public class Frame extends JFrame {
                 Bot.actionDelay++;
             }
         });
-        btnUp.setBounds(139, 219, 41, 23);
+        btnUp.setBounds(387, 64, 41, 23);
         panel.add(btnUp);
         
         btnDown = new JButton("v");
@@ -168,7 +171,7 @@ public class Frame extends JFrame {
                 Bot.actionDelay--;
             }
         });
-        btnDown.setBounds(139, 248, 41, 23);
+        btnDown.setBounds(387, 93, 41, 23);
         panel.add(btnDown);
         
         JButton btnSend = new JButton("Send");
@@ -178,8 +181,23 @@ public class Frame extends JFrame {
                 txtMessage.setText("");
             }
         });
-        btnSend.setBounds(75, 366, 89, 23);
+        btnSend.setBounds(298, 166, 89, 23);
         panel.add(btnSend);
+        
+        comboBox = new JComboBox();
+        comboBox.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		if(comboBox.getSelectedIndex()==0)
+        		{
+        			Bot.waitForName = true;
+        		} else {
+        			Bot.waitForName = false;
+        		}
+        	}
+        });
+        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Wait for name", "Don't wait for name"}));
+        comboBox.setBounds(81, 102, 134, 20);
+        panel.add(comboBox);
         
         //trying to redirect console output
         
@@ -208,6 +226,7 @@ public class Frame extends JFrame {
         String name = txtName.getText();
         
         bot.setName(name);
+        Bot.botName = name;
 
         // Enable debugging output.
         bot.setVerbose(true);

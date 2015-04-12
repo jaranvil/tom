@@ -23,6 +23,7 @@ public class Bot extends PircBot {
     //sender of current message
     public static String sender;
     public static String hostname;
+    public static boolean waitForName = true;
     //bot name
     public static String botName = "tom";
     public static String server = "";
@@ -125,20 +126,26 @@ public class Bot extends PircBot {
     
     //check for use of bot name in message
         public boolean checkForName() {
-        String[] names = {this.getName(),
-                            this.getName()+"?",
-                            this.getName()+":",
-                            this.getName()+",",
-                            "\""+this.getName()+"\"",
-                            this.getName()+"!",
-                            this.getName()+"."};
-        if(matchWords(names))
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }//end check method
+        	
+        	if(waitForName)
+        	{
+        		String[] names = {this.getName(),
+                        this.getName()+"?",
+                        this.getName()+":",
+                        this.getName()+",",
+                        "\""+this.getName()+"\"",
+                        this.getName()+"!",
+                        this.getName()+"."};
+			    if(matchWords(names))
+			    {
+			        return true;
+			    } else {
+			        return false;
+			    }
+        	} else {
+        		return true;
+        	}
+    }
     
 
     
@@ -1038,22 +1045,25 @@ public class Bot extends PircBot {
         
         public void poll()
         {
-        	if(msgArray[1].equalsIgnoreCase("poll") && msgArray[2].equals("help"))
-        		pollHelp();
-        	if(msgArray[1].equalsIgnoreCase("polls"))
-        		listPolls();
-        	if(msgArray[1].equalsIgnoreCase("poll") && !msgArray[2].equals("help"))
-        		pollInfo();
-        	if(msgArray[1].equalsIgnoreCase("vote"))
-        		vote();
-        	if(msgArray[1].equalsIgnoreCase("newPoll"))
-        		newPoll();
-        	if(msgArray[1].equalsIgnoreCase("addOption"))
-        		addOption();
-        	if(msgArray[1].equalsIgnoreCase("results"))	
-        		pollResults();
-        	if(msgArray[1].equalsIgnoreCase("endPoll"))
-        		endPoll();
+        	if(msgArray.length>2)
+        	{
+        		if(msgArray[1].equalsIgnoreCase("poll") && msgArray[2].equals("help"))
+            		pollHelp();
+            	if(msgArray[1].equalsIgnoreCase("polls"))
+            		listPolls();
+            	if(msgArray[1].equalsIgnoreCase("poll") && !msgArray[2].equals("help"))
+            		pollInfo();
+            	if(msgArray[1].equalsIgnoreCase("vote"))
+            		vote();
+            	if(msgArray[1].equalsIgnoreCase("newPoll"))
+            		newPoll();
+            	if(msgArray[1].equalsIgnoreCase("addOption"))
+            		addOption();
+            	if(msgArray[1].equalsIgnoreCase("results"))	
+            		pollResults();
+            	if(msgArray[1].equalsIgnoreCase("endPoll"))
+            		endPoll();
+        	}
         }
         
         public void pollHelp()
